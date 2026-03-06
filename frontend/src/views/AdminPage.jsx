@@ -15,38 +15,38 @@ import { signOut } from 'firebase/auth'
 const API = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
 import { Toast } from '../components/UI.jsx'
 import AdminLoginView from '../components/AdminLoginView.jsx'
-import OverviewView  from './OverviewView.jsx'
-import OfficersView  from './OfficersView.jsx'
-import LinksView     from './LinksView.jsx'
-import CreditsView   from './CreditsView.jsx'
-import CouponsView   from './CouponsView.jsx'
-import ActivityView  from './ActivityView.jsx'
-import PaymentsView  from './PaymentsView.jsx'
+import OverviewView from './OverviewView.jsx'
+import OfficersView from './OfficersView.jsx'
+import LinksView from './LinksView.jsx'
+import CreditsView from './CreditsView.jsx'
+import CouponsView from './CouponsView.jsx'
+import ActivityView from './ActivityView.jsx'
+import PaymentsView from './PaymentsView.jsx'
 import { P, STYLES } from '../styles/theme.js'
 
 const NAV_ITEMS = [
-  { id: 'overview', label: 'Overview',       icon: LayoutDashboard },
-  { id: 'officers', label: 'Officers',        icon: Users },
-  { id: 'links',    label: 'Tracking Links',  icon: Link2 },
-  { id: 'credits',  label: 'Credits',         icon: Zap },
-  { id: 'coupons',  label: 'Coupons',         icon: Ticket },
-  { id: 'activity', label: 'Activity Log',    icon: Activity },
-  { id: 'payments', label: 'Payments',        icon: CreditCard },
+  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { id: 'officers', label: 'Officers', icon: Users },
+  { id: 'links', label: 'Tracking Links', icon: Link2 },
+  { id: 'credits', label: 'Credits', icon: Zap },
+  { id: 'coupons', label: 'Coupons', icon: Ticket },
+  { id: 'activity', label: 'Activity Log', icon: Activity },
+  { id: 'payments', label: 'Payments', icon: CreditCard },
 ]
 
 export default function AdminPage() {
   const navigate = useNavigate()
 
-  const [authed, setAuthed]             = useState(() => sessionStorage.getItem('adminAuthed') === 'true')
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('adminAuthed') === 'true')
   const [adminProfile, setAdminProfile] = useState(() => { try { return JSON.parse(sessionStorage.getItem('adminProfile')) || null } catch { return null } })
-  const [tab, setTab]                   = useState('overview')
-  const [sideOpen, setSideOpen]         = useState(true)
-  const [officers, setOfficers]         = useState([])
-  const [links, setLinks]               = useState([])
-  const [toast, setToast]               = useState(null)
-  const [clock, setClock]               = useState(new Date())
-  const [fetchError, setFetchError]     = useState(null)
-  const [loading, setLoading]           = useState(false)
+  const [tab, setTab] = useState('overview')
+  const [sideOpen, setSideOpen] = useState(true)
+  const [officers, setOfficers] = useState([])
+  const [links, setLinks] = useState([])
+  const [toast, setToast] = useState(null)
+  const [clock, setClock] = useState(new Date())
+  const [fetchError, setFetchError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const id = setInterval(() => setClock(new Date()), 1000)
@@ -120,7 +120,7 @@ export default function AdminPage() {
   }
 
   const handleLogout = async () => {
-    try { await auth.signOut() } catch (e) {}
+    try { await auth.signOut() } catch (e) { }
     sessionStorage.removeItem('adminAuthed')
     sessionStorage.removeItem('adminProfile')
     setAdminProfile(null)
@@ -153,9 +153,9 @@ export default function AdminPage() {
   const views = {
     overview: <OverviewView officers={officers} links={links} setTab={setTab} />,
     officers: <OfficersView officers={officers} onApprove={handleApprove} onReject={handleReject} onAddCredit={handleAddCredit} onDeductCredit={handleDeductCredit} onDelete={handleDelete} />,
-    links:    <LinksView links={links} />,
-    credits:  <CreditsView officers={officers} onAddCredit={handleAddCredit} onDeductCredit={handleDeductCredit} onDelete={handleDelete} />,
-    coupons:  <CouponsView showToast={showToast} />,
+    links: <LinksView links={links} />,
+    credits: <CreditsView officers={officers} onAddCredit={handleAddCredit} onDeductCredit={handleDeductCredit} onDelete={handleDelete} />,
+    coupons: <CouponsView showToast={showToast} />,
     activity: <ActivityView />,
     payments: <PaymentsView showToast={showToast} />,
   }
