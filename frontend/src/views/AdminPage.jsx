@@ -186,7 +186,7 @@ export default function AdminPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 0 18px rgba(0,212,255,.35)',
             }}>
-              <Shield size={16} color={P.bg} />
+              <img src="/favicon.svg" alt="Logo" style={{ width: 20, height: 20 }} />
             </div>
             {sideOpen && <span style={{ fontFamily: "'Bebas Neue',cursive", fontSize: 19, color: P.txt, letterSpacing: 2, whiteSpace: 'nowrap' }}>TRAXELON</span>}
           </div>
