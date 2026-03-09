@@ -42,7 +42,7 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('adminAuthed') === 'true')
   const [adminProfile, setAdminProfile] = useState(() => { try { return JSON.parse(sessionStorage.getItem('adminProfile')) || null } catch { return null } })
   const [tab, setTab] = useState('overview')
-  const [sideOpen, setSideOpen] = useState(true)
+  const [sideOpen, setSideOpen] = useState(window.innerWidth > 768)
   const [officers, setOfficers] = useState([])
   const [links, setLinks] = useState([])
   const [toast, setToast] = useState(null)
@@ -165,19 +165,18 @@ export default function AdminPage() {
       <div className="ascan" />
       {toast && <Toast msg={toast.msg} ok={toast.ok} onClose={() => setToast(null)} />}
 
-      <div style={{
-        display: 'flex', height: '100vh', overflow: 'hidden',
-        fontFamily: "'DM Sans',sans-serif", background: P.bg,
+      <div className="layout-wrapper" style={{
+        background: P.bg,
         backgroundImage: 'linear-gradient(rgba(0,212,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.02) 1px,transparent 1px)',
         backgroundSize: '40px 40px',
       }}>
+        
+        {/* MOBILE OVERLAY */}
+        <div className={`mobile-overlay ${sideOpen ? 'open' : ''}`} onClick={() => setSideOpen(false)}></div>
 
         {/* SIDEBAR */}
-        <aside style={{
-          width: sideOpen ? 218 : 62, flexShrink: 0,
-          background: P.surf, borderRight: `1px solid ${P.border}`,
-          display: 'flex', flexDirection: 'column',
-          transition: 'width .25s ease', overflow: 'hidden',
+        <aside className={`sidebar ${sideOpen ? 'open' : 'closed'}`} style={{
+          background: P.surf, borderRight: `1px solid ${P.border}`
         }}>
           <div style={{ padding: '18px 14px', borderBottom: `1px solid ${P.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{

@@ -72,4 +72,22 @@ export const STYLES = `
   @keyframes spin{to{transform:rotate(360deg);}}
   @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(7px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
   .al-shaking{animation:shake .35s ease;}
+  
+  /* Mobile Responsiveness */
+  .layout-wrapper { display: flex; height: 100vh; overflow: hidden; font-family: 'DM Sans', sans-serif; }
+  .sidebar { 
+    flex-shrink: 0; display: flex; flex-direction: column; transition: transform 0.3s ease, width 0.25s ease;
+    overflow: hidden; height: 100%; z-index: 100;
+  }
+  .sidebar.open { width: 218px; }
+  .sidebar.closed { width: 62px; }
+  
+  .mobile-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; backdrop-filter: blur(2px); }
+  
+  @media (max-width: 768px) {
+    .sidebar { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+    .sidebar.open { width: 240px; transform: translateX(0); }
+    .sidebar.closed { transform: translateX(-100%); }
+    .mobile-overlay.open { display: block; }
+  }
 `
