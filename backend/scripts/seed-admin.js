@@ -15,7 +15,13 @@ admin.initializeApp({ credential: admin.credential.cert(serviceAccount) })
 const db = admin.firestore()
 const auth = admin.auth()
 
-const ADMIN_EMAIL = process.argv[2] || 'karishmakotecha10@gmail.com'
+const ADMIN_EMAIL = process.argv[2]
+
+if (!ADMIN_EMAIL) {
+    console.error('❌  Please provide an email address.')
+    console.error('    Usage: node scripts/seed-admin.js <admin_email@example.com>')
+    process.exit(1)
+}
 
 async function seedAdmin() {
     console.log(`\n🔍  Looking up Firebase Auth user for: ${ADMIN_EMAIL}`)
