@@ -34,6 +34,16 @@ export default function ActivityView() {
     return () => { mounted = false }
   }, [API])
 
+  const handleDelete = async (id) => {
+    if (!confirm('Delete this log?')) return
+    try {
+      await deleteDoc(doc(db, 'activityLogs', id))
+      setLogs(prev => prev.filter(l => l.id !== id))
+    } catch (err) {
+      console.error('Delete failed:', err.message)
+    }
+  }
+
   const filtered = logs.filter(l => {
     if (filter !== 'all' && l.type !== filter) return false
     if (q && !(l.email || '').toLowerCase().includes(q.toLowerCase()) && !(l.displayName || '').toLowerCase().includes(q.toLowerCase())) return false
@@ -86,7 +96,13 @@ export default function ActivityView() {
                     {log.ip || '—'}{log.device ? ` · ${log.device}` : ''}
                   </td>
                   <td style={{ padding: '12px 14px' }}>
-                    {/* Deleting session logs is disabled to maintain strict audit trails */}
+                    <button
+                      onClick={() => handleDelete(log.id)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: P.red, padding: 4 }}
+                      className="atr-del"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -103,5 +119,3 @@ export default function ActivityView() {
     </div>
   )
 }
-
-//hello world how are you
