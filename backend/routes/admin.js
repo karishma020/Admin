@@ -232,13 +232,16 @@ router.get('/stats', async (_req, res) => {
       db.collection('trackingLinks').get()
     ])
 
-    let totalOfficers = usersSnap.docs.length;
+    let totalOfficers = 0;
     let approved = 0;
     let pending = 0;
     let totalCredits = 0;
 
     usersSnap.docs.forEach(d => {
       const u = d.data();
+      if (u.isAdmin) return; // Skip the admin account
+
+      totalOfficers++;
       if (u.status === 'approved' || !u.status) approved++;
       if (u.status === 'pending') pending++;
       if (u.status === 'rejected') pending++; 
