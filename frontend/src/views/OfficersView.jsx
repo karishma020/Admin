@@ -28,7 +28,7 @@ export default function OfficersView({ officers, onApprove, onReject, onAddCredi
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: `1px solid ${P.border}` }}>
-              {['Officer', 'Badge ID', 'Status', 'Credits', 'Joined', 'Actions'].map(h => (
+              {['Officer', 'Badge ID', 'Status', 'Credits', 'Actions'].map(h => (
                 <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10, color: P.muted, fontFamily: "'JetBrains Mono',monospace", letterSpacing: 1, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr>
@@ -53,7 +53,7 @@ export default function OfficersView({ officers, onApprove, onReject, onAddCredi
                   </div>
                 </td>
                 <td style={{ padding: '12px 14px', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: P.txt2 }}>{o.badgeId || '—'}</td>
-                <td style={{ padding: '12px 14px' }}><SBadge status={o.status === 'pending' || !o.status ? 'approved' : o.status} /></td>
+                <td style={{ padding: '12px 14px' }}><SBadge status={(!o.status || o.status === 'pending' || o.status === 'approved') ? 'approved' : 'pending'} /></td>
                 <td style={{ padding: '12px 14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, color: P.cyan, fontWeight: 700, minWidth: 24 }}>{o.credits ?? 0}</span>
@@ -67,9 +67,7 @@ export default function OfficersView({ officers, onApprove, onReject, onAddCredi
                     <button className="aib" style={{ color: P.red }} onClick={() => { onDeductCredit(o.uid, parseInt(amt[o.uid] || 1)); setAmt(p => ({ ...p, [o.uid]: '' })) }}><Minus size={12} /></button>
                   </div>
                 </td>
-                <td style={{ padding: '12px 14px', fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: P.muted }}>
-                  {o.createdAt?.toDate ? o.createdAt.toDate().toLocaleDateString('en-IN') : '—'}
-                </td>
+
                 <td style={{ padding: '12px 14px' }}>
                   <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                     {(!o.status || o.status === 'pending' || o.status === 'approved') && <button className="abtn abtn-y" style={{ padding: '5px 10px', fontSize: 11 }} onClick={() => onReject(o.uid)}><XCircle size={11} /> Revoke</button>}
@@ -80,7 +78,7 @@ export default function OfficersView({ officers, onApprove, onReject, onAddCredi
               </tr>
             ))}
             {rows.length === 0 && (
-              <tr><td colSpan={6} style={{ padding: 40, textAlign: 'center', color: P.muted, fontFamily: "'DM Sans',sans-serif", fontSize: 13 }}>No officers found</td></tr>
+              <tr><td colSpan={5} style={{ padding: 40, textAlign: 'center', color: P.muted, fontFamily: "'DM Sans',sans-serif", fontSize: 13 }}>No officers found</td></tr>
             )}
           </tbody>
         </table>

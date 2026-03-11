@@ -108,7 +108,7 @@ export default function AdminPage() {
       // Sync global stats
       const statsRef = doc(db, 'metadata', 'dashboardStats')
       const statUpdate = { approved: increment(1) }
-      if (o.status === 'pending') statUpdate.pending = increment(-1)
+      if (o.status === 'rejected') statUpdate.pending = increment(-1)
       if (newCredits) statUpdate.totalCredits = increment(1)
       try { await updateDoc(statsRef, statUpdate) } catch(err) {}
 
@@ -117,7 +117,7 @@ export default function AdminPage() {
       setStats(prev => {
         if (!prev) return prev
         const next = { ...prev, approved: prev.approved + 1 }
-        if (o.status === 'pending') next.pending = Math.max(0, prev.pending - 1)
+        if (o.status === 'rejected') next.pending = Math.max(0, prev.pending - 1)
         if (newCredits) next.totalCredits = prev.totalCredits + 1
         return next
       })
@@ -129,14 +129,15 @@ export default function AdminPage() {
   const handleReject = async (uid) => {
     try {
       const o = officers.find(x => x.uid === uid)
+      if (o.status === 'rejected') return // Already rejected
       
-      // Revoking means moving them back to 'pending' as requested by the user
-      await updateDoc(doc(db, 'users', uid), { status: 'pending' })
+      // Revoking means moving them to 'rejected' natively
+      await updateDoc(doc(db, 'users', uid), { status: 'rejected' })
       
       // Sync global stats
       const statsRef = doc(db, 'metadata', 'dashboardStats')
       const statUpdate = {}
-      if (!o.status || o.status === 'approved') {
+      if (o.status !== 'rejected') {
         statUpdate.approved = increment(-1)
         statUpdate.pending = increment(1)
       }
@@ -145,11 +146,11 @@ export default function AdminPage() {
       }
 
       // Update local state to reflect change immediately without refresh
-      setOfficers(prev => prev.map(x => x.uid === uid ? { ...x, status: 'pending' } : x))
+      setOfficers(prev => prev.map(x => x.uid === uid ? { ...x, status: 'rejected' } : x))
       setStats(prev => {
         if (!prev) return prev
         const next = { ...prev }
-        if (!o.status || o.status === 'approved') {
+        if (o.status !== 'rejected') {
           next.approved = Math.max(0, prev.approved - 1)
           next.pending = prev.pending + 1
         }
