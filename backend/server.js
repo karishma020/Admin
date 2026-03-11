@@ -18,10 +18,6 @@ app.use(cors({
 // ── Routes ───────────────────────────────────────────────
 app.use('/api/admin', adminRoutes)
 
-// Health check
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'traxelon-admin-backend', ts: new Date().toISOString() })
-})
 
 // 404 fallback
 app.use((_req, res) => {
@@ -30,8 +26,7 @@ app.use((_req, res) => {
 
 // ── Start ─────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n🚀  Traxelon Admin Backend running on http://localhost:${PORT}`)
-  console.log(`    Health: http://localhost:${PORT}/api/health\n`)
+  console.log(`\n🚀  Traxelon Admin Backend running on http://localhost:${PORT}\n`)
 })
 
 module.exports = app
