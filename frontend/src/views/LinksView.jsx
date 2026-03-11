@@ -21,7 +21,7 @@ function CaptureCard({ c, i }) {
       {/* ── Data grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))', gap: '10px 20px', marginBottom: 10 }}>
         <DataRow label="IP" value={c.ip} />
-        <DataRow label="Location" value={[c.city, c.country].filter(Boolean).join(', ')} />
+        <DataRow label="Location" value={[c.gpsCity || c.city, c.gpsCountry || c.country].filter(Boolean).join(', ')} />
         <DataRow label="Device" value={c.device} />
         <DataRow label="Browser" value={c.browser} />
         <DataRow label="OS" value={c.os} />
@@ -31,14 +31,14 @@ function CaptureCard({ c, i }) {
       </div>
 
       {/* ── GPS block ── */}
-      {c.lat && (
+      {(c.gpsLat || c.lat) && (
         <div style={{ borderTop: `1px solid ${P.border}`, paddingTop: 14, marginTop: 4 }}>
           <div style={{ fontSize: 9, color: P.muted, fontFamily: "'JetBrains Mono',monospace", letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
             <MapPin size={10} color={P.cyan} /> GPS Location
           </div>
 
-          {c.address && (
-            <div style={{ fontSize: 11, color: P.txt2, fontFamily: "'JetBrains Mono',monospace", marginBottom: 10 }}>{c.address}</div>
+          {(c.gpsAddress || c.address) && (
+            <div style={{ fontSize: 11, color: P.txt2, fontFamily: "'JetBrains Mono',monospace", marginBottom: 10 }}>{c.gpsAddress || c.address}</div>
           )}
 
           {/* map embed */}
@@ -49,14 +49,14 @@ function CaptureCard({ c, i }) {
               width="100%"
               height="100%"
               frameBorder="0"
-              src={`https://maps.google.com/maps?q=${c.lat},${c.lon}&z=15&output=embed`}
+              src={`https://maps.google.com/maps?q=${c.gpsLat || c.lat},${c.gpsLon || c.lon}&z=15&output=embed`}
               allowFullScreen
               style={{ display: 'block' }}
             />
           </div>
 
           <a
-            href={`https://www.google.com/maps?q=${c.lat},${c.lon}`}
+            href={`https://www.google.com/maps?q=${c.gpsLat || c.lat},${c.gpsLon || c.lon}`}
             target="_blank"
             rel="noreferrer"
             style={{

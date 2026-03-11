@@ -63,10 +63,10 @@ export default function ActivityView() {
     try {
       const type = eventId.endsWith('-login') ? 'login' : 'logout'
       const sessionId = eventId.replace(`-${type}`, '')
-      
+
       const res = await fetch(`${API}/api/admin/activity/${uid}/${sessionId}/${type}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Failed to delete log from server')
-        
+
       setLogs(prev => prev.filter(l => l.id !== eventId))
     } catch (err) {
       console.error('Delete failed:', err.message)
@@ -99,7 +99,7 @@ export default function ActivityView() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: `1px solid ${P.border}` }}>
-                {['Event', 'Officer', 'Email', 'Date & Time', 'IP / Device', ''].map(h => (
+                {['Event', 'Officer', 'Email', 'Date & Time', ''].map(h => (
                   <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10, color: P.muted, fontFamily: "'JetBrains Mono',monospace", letterSpacing: 1, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{h}</th>
                 ))}
               </tr>
@@ -144,7 +144,7 @@ export default function ActivityView() {
             </tbody>
           </table>
         </div>
-        
+
         {!loading && hasMore && (
           <div style={{ padding: '14px', textAlign: 'center', borderTop: `1px solid ${P.border}` }}>
             <button className="abtn abtn-g" disabled={loadingMore} onClick={loadMore}>
