@@ -90,9 +90,10 @@ router.delete('/users/:uid', async (req, res) => {
     const userSnap = await db.collection('users').doc(uid).get()
     if (userSnap.exists) {
       const userData = userSnap.data()
-      const statUpdate = { totalOfficers: admin.firestore.FieldValue.increment(-1) }
-      if (userData.status === 'approved') statUpdate.approved = admin.firestore.FieldValue.increment(-1)
-      if (userData.status === 'pending') statUpdate.pending = admin.firestore.FieldValue.increment(-1)
+      const FieldValue = adminApp.firestore.FieldValue
+      const statUpdate = { totalOfficers: FieldValue.increment(-1) }
+      if (userData.status === 'approved') statUpdate.approved = FieldValue.increment(-1)
+      if (userData.status === 'pending') statUpdate.pending = FieldValue.increment(-1)
       batch.update(statsRef, statUpdate)
     }
 
