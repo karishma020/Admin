@@ -4,6 +4,18 @@ import { Search, ChevronDown, ChevronUp, MapPin, Clock } from 'lucide-react'
 import { SBadge } from '../components/UI.jsx'
 import { P } from '../styles/theme.js'
 
+function formatIST(raw) {
+  if (!raw) return '—'
+  const d = new Date(raw)
+  if (isNaN(d)) return raw
+  return d.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: true,
+  })
+}
+
 function DataRow({ label, value }) {
   if (!value) return null
   return (
@@ -73,7 +85,7 @@ function CaptureCard({ c, i }) {
 
       {/* ── Timestamp ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: P.muted }}>
-        <Clock size={10} /> {c.capturedAt}
+        <Clock size={10} /> {formatIST(c.capturedAt)}
       </div>
     </div>
   )
